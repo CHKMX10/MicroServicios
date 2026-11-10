@@ -26,6 +26,14 @@ spring:
               filters:
                 - StripPrefix=2
 
+            # ---------- RUTA 3 (opcional): hacia citas ----------
+            - id: ruta-citas
+              uri: lb://citas
+              predicates:
+                - Path=/api/citas/**
+              filters:
+                - StripPrefix=2
+
 eureka:
   client:
     service-url:
