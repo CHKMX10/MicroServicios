@@ -1,5 +1,6 @@
 package com.example.medicos.service;
 
+import com.example.commons.clients.CitaClient;
 import com.example.commons.dto.medicos.MedicoRequest;
 import com.example.commons.dto.medicos.MedicoResponse;
 import com.example.commons.enums.DisponibilidadMedico;
@@ -28,10 +29,12 @@ public class MedicoServiceImpl implements MedicoService {
 
     private final MedicoMapper medicoMapper;
 
+    private final CitaClient citaClient;
+
     @Override
     @Transactional(readOnly = true)
     public List<MedicoResponse> listar() {
-        log.info("Listando a todos los medicos activos");
+        log.info("Listando a todos los medicos activos00000");
 
         return medicoRepository.findByEstadoRegistro(EstadoRegistro.ACTIVO).stream()
                 .map(medicoMapper::entidadAResponse).toList();
@@ -99,6 +102,8 @@ public class MedicoServiceImpl implements MedicoService {
 
         Medico medico = obtenerMedicoActivoPorId(id);
 
+        validarMedicoTieneCitasAgendadas(id);
+
         validarCambiosUnicos(request, id);
 
         log.info("Actualizando médico con ID: {}", id);
@@ -128,11 +133,13 @@ public class MedicoServiceImpl implements MedicoService {
 
         log.info("Elimar Medico con ID: {}", id);
 
+        validarMedicoTieneCitasAgendadas(id);
+
         medico.eliminar();
 
         medicoRepository.saveAndFlush(medico);
 
-        log.info("Se eliminó el medico exitosamente");
+        log.info("Se eliminó el medico exitosamente ");
     }
 
     private Medico obtenerMedicoActivoPorId(Long id){
@@ -158,7 +165,7 @@ public class MedicoServiceImpl implements MedicoService {
         if(medicoRepository.existsByTelefonoAndEstadoRegistro(
                 request.telefono().trim(), EstadoRegistro.ACTIVO))
             throw new ConflictoException(
-                    "Ya existe un medico activo con el Email: " + request.telefono()
+                    "Ya existe un medico activo con el Telefono: " + request.telefono()
             );
 
         log.info("Obteniendo cedula profesional unica");
@@ -197,5 +204,13 @@ public class MedicoServiceImpl implements MedicoService {
                             + request.cedulaProfesional()
             );
     }
+
+    private void validarMedicoTieneCitasAgendadas(Long id){
+        log.info("Validando si el medico con ID: {}"+
+                "tiene citas agendadas en servicio remoto", id);
+
+        citaClient.medicoTieneCitasAsignadas(id);
+    }
+
 
 }

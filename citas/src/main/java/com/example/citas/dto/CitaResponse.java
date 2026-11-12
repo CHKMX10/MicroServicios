@@ -1,7 +1,7 @@
 package com.example.citas.dto;
 
-import com.example.commons.dto.DatosMedico;
-import com.example.commons.dto.DatosPaciente;
+import com.example.commons.dto.medicos.DatosMedico;
+import com.example.commons.dto.pacientes.DatosPaciente;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 

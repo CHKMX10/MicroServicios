@@ -3,11 +3,10 @@ package com.example.citas.mapper;
 import com.example.citas.dto.CitaRequest;
 import com.example.citas.dto.CitaResponse;
 import com.example.citas.entity.Cita;
-import com.example.commons.dto.DatosMedico;
-import com.example.commons.dto.DatosPaciente;
+import com.example.commons.dto.medicos.DatosMedico;
+import com.example.commons.dto.pacientes.DatosPaciente;
 import com.example.commons.dto.medicos.MedicoResponse;
 import com.example.commons.dto.pacientes.PacienteReponse;
-import com.example.commons.dto.pacientes.PacienteRequest;
 import com.example.commons.mapper.CommonMapper;
 import org.springframework.stereotype.Component;
 
@@ -38,13 +37,24 @@ public class CitaMapper implements CommonMapper<CitaRequest, CitaResponse, Cita>
                 entidad.getEstadoCita().getDescripcion()
         );
     }
-
-    private DatosPaciente pacienteResponseADatosPaciete(PacienteReponse paciente){
+     public CitaResponse entidadAResponse(Cita entidad, PacienteReponse paciente, MedicoResponse medico) {
+             return entidad == null
+                ? null
+                : new CitaResponse(
+                entidad.getId(),
+                pacienteResponseADatosPaciente(paciente),
+                medicoResponseADatosMedicos(medico),
+                entidad.getFechaCita(),
+                entidad.getSintomas(),
+                entidad.getEstadoCita().getDescripcion()
+        );
+    }
+    private DatosPaciente pacienteResponseADatosPaciente(PacienteReponse paciente){
         return paciente == null
                 ? null
                 : new DatosPaciente(
                         paciente.nombre(),
-                        paciente.numExpediendte(),
+                        paciente.numExpediente(),
                         paciente.edad() + "Años",
                         paciente.peso() + "Kg",
                         paciente.estatura() + "m",

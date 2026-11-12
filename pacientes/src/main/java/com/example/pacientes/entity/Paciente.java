@@ -1,8 +1,8 @@
 package com.example.pacientes.entity;
 
-
 import com.example.commons.enums.EstadoRegistro;
 import com.example.commons.exceptions.ConflictoException;
+import com.example.commons.exceptions.DatoInvalidoException;
 import com.example.commons.utils.StringCustomUtils;
 import com.example.commons.utils.ValoresNumericosUtils;
 import jakarta.persistence.*;
@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.stream.Collectors;
 
 @Entity
@@ -87,7 +85,7 @@ public class Paciente {
         StringCustomUtils.validarTamanio(telefono, 10, 10,
                 "El numero de telefono es requerido y debe tener 10 caracteres ");
 
-        StringCustomUtils.validarTamanio(direccion, 5, 50,
+        StringCustomUtils.validarTamanio(direccion, 5, 150,
                 "El nombre es requerido y debe tener entre 5 y 150 caracteres ");
 
         ValoresNumericosUtils.validarRangoShort(edad, (short) 1, (short) 100,
@@ -102,14 +100,21 @@ public class Paciente {
 
     public String obtenerNombreCompleto(){
         return String.join(
-                "",
+                " ",
                 this.getNombre(),
                 this.getApellidoPaterno(),
                 this.getApellidoMaterno());
     }
 
     public static Double calcularImc(double peso, double estatura){
-        return peso / (estatura * estatura);
+        double imc = peso / (estatura * estatura);
+
+        if (!Double.isFinite(imc) || imc < 10.0 || imc > 50.0) {
+            throw new DatoInvalidoException(
+                    "El IMC calculado debe estar entre 10.0 y 50.0"
+            );
+        }
+        return imc;
     }
 
     public void validarNoEliminado(){
@@ -167,6 +172,7 @@ public class Paciente {
                 .direccion(direccion.trim())
                 .numExpediente(generarExpediente(telefono))
                 .imc(calcularImc(peso,estatura))
+                .estadoRegistro(EstadoRegistro.ACTIVO)
                 .build();
     }
 

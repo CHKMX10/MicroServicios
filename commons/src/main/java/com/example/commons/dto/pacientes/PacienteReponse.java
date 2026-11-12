@@ -9,7 +9,7 @@ public record PacienteReponse(
         Long id,
 
         @Schema(description = "Nombre del paciente", example = "Juan Carlos Perez")
-        String nombreCom,
+        String nombre,
 
         @Schema(description = "Edad del paciente", example = "22")
         Short edad,
@@ -33,7 +33,7 @@ public record PacienteReponse(
         String direccion,
 
         @Schema(description = "Numero de expediente del paciente", example = "aa2a2a15ss1ad5sdfeff4f")
-        String numExpediendte
+        String numExpediente
 
         ) {
 }

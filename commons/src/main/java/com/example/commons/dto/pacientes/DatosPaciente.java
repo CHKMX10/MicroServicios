@@ -1,4 +1,4 @@
-package com.example.commons.dto;
+package com.example.commons.dto.pacientes;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
