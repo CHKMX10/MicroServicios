@@ -62,7 +62,7 @@ public class Medico {
 
     public String obtenerNombreCompleto(){
         return String.join(
-                "",
+                " ",
                 this.getNombre(),
                 this.getApellidoPaterno(),
                 this.getApellidoMaterno());

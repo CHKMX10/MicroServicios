@@ -6,7 +6,9 @@ import com.example.citas.dto.CitaResponse;
 import com.example.citas.service.CitaService;
 import com.example.commons.controller.CrudController;
 import com.example.commons.docs.ProblemaDocs;
+
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -35,13 +37,45 @@ public class CitaController extends CrudController<CitaRequest, CitaResponse, Ci
             "actualizarse por regla de negocio",
             content = @Content(mediaType = "application/problem+json",
                     schema = @Schema(implementation = ProblemaDocs.class)))
-    @PutMapping("/{cita}/estado/{idEstado}")
+    @PutMapping("/{idCita}/estado/{idEstado}")
     public ResponseEntity<Void> actualizarEstadoCita(
             @PathVariable @Positive(message = "El IdCita debe ser positivo") Long idCita,
             @PathVariable @Positive(message = "El idEstado debe ser positivo") Long idEstado
     ) {
-
         service.actualizarEstadoCita(idCita, idEstado);
         return ResponseEntity.noContent().build();
     }
+
+
+    @ApiResponse(responseCode = "204", description = "Medico no tiene citas asignadas")
+    @ApiResponse(responseCode = "409", description = "Medico tiene citas asignadas y no se puede " +
+            "modificar ni eliminar",
+            content = @Content(mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemaDocs.class)))
+    @GetMapping("/id-medico/{idMedico}/citas-asignadas")
+    public ResponseEntity<Void> medicoTieneCitasAsignadas(
+            @Parameter(description = "Id del medico", example = "1")
+            @PathVariable @Positive(message = "El idMedico debe ser positivo") Long idMedico
+    ){
+        service.medicoTieneCitasAsignadas(idMedico);
+        return ResponseEntity.noContent().build();
+    }
+
+    @ApiResponse(responseCode = "204", description = "El paciente no tiene citas asignadas")
+    @ApiResponse(responseCode = "409", description = "El paciente tiene citas asignadas",
+            content = @Content(
+                    mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemaDocs.class)
+            )
+    )
+    @GetMapping("/id-paciente/{idPaciente}/citas-asignadas")
+    public ResponseEntity<Void> pacienteTieneCitasQueImpidenCambios(
+            @Parameter(description = "ID del paciente", example = "1")
+            @PathVariable @Positive(message = "El ID del paciente debe ser positivo")
+            Long idPaciente
+    ) {
+        service.pacienteTieneCitasQueImpidenCambios(idPaciente);
+        return ResponseEntity.noContent().build();
+    }
+
 }

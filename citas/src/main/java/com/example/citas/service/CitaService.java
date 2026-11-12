@@ -7,4 +7,8 @@ import com.example.commons.service.CrudService;
 public interface CitaService extends CrudService<CitaRequest, CitaResponse> {
 
     void actualizarEstadoCita(Long idCita, Long idEstadoCita);
+
+    void medicoTieneCitasAsignadas(Long idMedico);
+
+    void pacienteTieneCitasQueImpidenCambios(Long idPaciente);
 }

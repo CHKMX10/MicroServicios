@@ -8,15 +8,18 @@ spring:
     gateway:
       server:
         webflux:
+          #despues de configurar la url en apiconfig se debe poner x forwarded, prefix enabled
+          x-forwarded:
+            prefix-enabled: true
           routes:
             # ---------- RUTA 1: hacia servicio-a ----------
             # El contexto público (/api) lo pone el Gateway; servicio-a solo conoce /saludo
-            - id: ruta-servicio-a
-              uri: lb://servicio-a
+            - id: ruta-pacientes
+              uri: lb://pacientes
               predicates:
-                - Path=/api/saludo/**
+                - Path=/api/pacientes/**
               filters:
-                - StripPrefix=1
+                - StripPrefix=2
 
             # ---------- RUTA 2 (opcional): hacia servicio-b ----------
             - id: ruta-medicos
@@ -33,6 +36,9 @@ spring:
                 - Path=/api/citas/**
               filters:
                 - StripPrefix=2
+      #para encender el balanceador de cargas de swagger
+    loadbalancer:
+      enabled: true
 
 eureka:
   client:

@@ -32,9 +32,6 @@ public class Cita {
     @Column(name = "ID_MEDICO", nullable = false)
     private Long idMedico;
 
-    @Column(name = "NUM_EXPEDIENTE", length = 20, nullable = false)
-    private String numExpediente;
-
     @Column(name = "FECHA_CITA", nullable = false)
     private LocalDateTime fechaCita;
 
@@ -58,8 +55,9 @@ public class Cita {
 
     validarFecha(fechaCita);
 
-        StringCustomUtils.validarTamanio(sintomas,1,500,
+    StringCustomUtils.validarTamanio(sintomas,1,500,
                 "La descripcion de los sintomas es requerido y debe contener entre 1 y 500 caracteres");
+
     }
 
     private void validarNoEliminado() {
@@ -86,7 +84,6 @@ public class Cita {
         this.idMedico = idMedico;
         this.fechaCita = fechaCita;
         this.sintomas = sintomas.trim();
-
     }
 
     public static Cita crear(Long idPaciente, Long idMedico,
