@@ -74,7 +74,7 @@ public class PacienteServiceImpl implements PacienteService{
 
         Paciente paciente = obtenerPacienteActivoPorId(id);
 
-        validarPacienteTieneCitasAgendadas(id);
+        citaClient.pacienteTieneCitasAsignadas(id);
 
         validarCambiosUnicos(request, id);
 
@@ -106,7 +106,7 @@ public class PacienteServiceImpl implements PacienteService{
 
         log.info("Elimar Paciente con ID: {}", id);
 
-        validarPacienteTieneCitasAgendadas(id);
+        citaClient.pacienteTieneCitasAsignadas(id);
 
         paciente.eliminar();
 

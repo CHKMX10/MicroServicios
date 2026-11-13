@@ -46,6 +46,22 @@ public class CitaController extends CrudController<CitaRequest, CitaResponse, Ci
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Verificar si un paciente tiene citas confirmadas o en curso",
+            description = "Actualizar el estado de una cita utilizando" +
+                    "el identificador de la cita y el identificador del nuevo estado.")
+    @ApiResponse(responseCode = "204", description = "Disponibilidad de la cita actualizada")
+    @ApiResponse(responseCode = "409", description = "La disponibilidad de la cita no puede " +
+            "actualizarse por regla de negocio",
+            content = @Content(mediaType = "application/problem+json",
+                    schema = @Schema(implementation = ProblemaDocs.class)))
+    @GetMapping("/id-paciente/{idPaciente}/citas-asignadas")
+    public ResponseEntity<Void> pacienteTieneCitas(
+            @PathVariable @Positive(message = "El IdCita debe ser positivo") Long idPaciente
+    ) {
+        service.pacienteTieneCitas(idPaciente);
+        return ResponseEntity.noContent().build();
+    }
+
 
     @ApiResponse(responseCode = "204", description = "Medico no tiene citas asignadas")
     @ApiResponse(responseCode = "409", description = "Medico tiene citas asignadas y no se puede " +
@@ -68,13 +84,13 @@ public class CitaController extends CrudController<CitaRequest, CitaResponse, Ci
                     schema = @Schema(implementation = ProblemaDocs.class)
             )
     )
-    @GetMapping("/id-paciente/{idPaciente}/citas-asignadas")
-    public ResponseEntity<Void> pacienteTieneCitasQueImpidenCambios(
+    @GetMapping("/id-medico/{idMedico}/validar-eliminacion")
+    public ResponseEntity<Void> validarEliminacionMedico(
             @Parameter(description = "ID del paciente", example = "1")
-            @PathVariable @Positive(message = "El ID del paciente debe ser positivo")
-            Long idPaciente
+            @PathVariable @Positive(message = "El ID del medico debe ser positivo")
+            Long idMedico
     ) {
-        service.pacienteTieneCitasQueImpidenCambios(idPaciente);
+        service.validarEliminacionMedico(idMedico);
         return ResponseEntity.noContent().build();
     }
 

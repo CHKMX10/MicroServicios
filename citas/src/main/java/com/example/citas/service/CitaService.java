@@ -10,5 +10,8 @@ public interface CitaService extends CrudService<CitaRequest, CitaResponse> {
 
     void medicoTieneCitasAsignadas(Long idMedico);
 
-    void pacienteTieneCitasQueImpidenCambios(Long idPaciente);
+    void pacienteTieneCitas(Long idPaciente);
+
+    void validarEliminacionMedico(Long idMedico);
+
 }
