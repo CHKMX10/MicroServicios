@@ -133,7 +133,7 @@ public class MedicoServiceImpl implements MedicoService {
 
         log.info("Elimar Medico con ID: {}", id);
 
-        validarMedicoTieneCitasAgendadas(id);
+        citaClient.validarEliminacionMedico(id);
 
         medico.eliminar();
 

@@ -13,4 +13,8 @@ public interface CitaClient {
     @GetMapping("/id-paciente/{idPaciente}/citas-asignadas")
     void pacienteTieneCitasAsignadas(@PathVariable Long idPaciente);
 
+    @GetMapping("/id-medico/{idMedico}/validar-eliminacion")
+    void validarEliminacionMedico(@PathVariable("idMedico") Long idMedico);
+
+
 }
